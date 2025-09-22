@@ -48,38 +48,49 @@ struct GenderSelectView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            Image(systemName: genderIconName)
-                .font(.system(size: gender.name == "" ? 80 : 90))
-                .frame(width: 150, height: 120)
-                .foregroundStyle(genderColor(for: gender.name))
-                .contentTransition(.symbolEffect(.replace))
-                .padding()
+        VStack(spacing: 30) {
+            Text("Select Your Gender")
+                .foregroundStyle(.secondary)
             
-            Rectangle()
-                .fill(.secondary)
-                .frame(width: 180, height: 0.5)
-            
-            HStack {
-                ForEach(["Male", "Female"], id: \.self) { genderName in
-                    Button {
-                        withAnimation {
-                            gender.name = genderName
+            VStack(spacing: 0) {
+                Image(systemName: genderIconName)
+                    .font(.system(size: gender.name == "" ? 80 : 90))
+                    .frame(width: 150, height: 120)
+                    .foregroundStyle(genderColor(for: gender.name))
+                    .contentTransition(.symbolEffect(.replace))
+                    .padding()
+                
+                Rectangle()
+                    .fill(.secondary)
+                    .frame(width: 180, height: 0.5)
+                
+                HStack {
+                    ForEach(["Male", "Female"], id: \.self) { genderName in
+                        Button {
+                            withAnimation {
+                                gender.name = genderName
+                            }
+                        } label: {
+                            Text(gender.name == genderName ? genderName : String(genderName.first!))
+                                .frame(width: gender.name == genderName ? 80 : 12)
+                                .contentTransition(.numericText())
                         }
-                    } label: {
-                        Text(gender.name == genderName ? genderName : String(genderName.first!))
-                            .frame(width: gender.name == genderName ? 80 : 12)
-                            .contentTransition(.numericText())
+                        .buttonStyle(.bordered)
+                        .tint(genderColor(for: genderName))
                     }
-                    .buttonStyle(.bordered)
-                    .tint(genderColor(for: genderName))
                 }
+                .padding()
             }
-            .padding()
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: 30)
-                .stroke(.secondary, lineWidth: 0.5)
+            .overlay {
+                RoundedRectangle(cornerRadius: 30)
+                    .stroke(.secondary, lineWidth: 0.5)
+            }
+            
+            Button("Reset") {
+                gender.name = ""
+            }
+            .buttonStyle(.bordered)
+            .tint(.gray)
         }
     }
 }

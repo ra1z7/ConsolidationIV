@@ -11,7 +11,7 @@ import SwiftUI
 struct ConsolidationIVApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            GenderSelectView()
         }
     }
 }
