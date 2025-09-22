@@ -21,47 +21,59 @@ struct ContentView: View {
 
 // Why @State works with structs
 struct Gender {
-    var gender: String
-    
-    init(gender: String = "Male") {
-        self.gender = gender
-    }
+    var name = ""
 }
 
 struct GenderSelectView: View {
     @State private var gender = Gender()
     
-    var genderIcon: String {
-        if gender.gender == "Male" {
+    var genderIconName: String {
+        if gender.name == "Male" {
             return "figure.stand"
-        } else {
+        } else if gender.name == "Female" {
             return "figure.stand.dress"
+        } else {
+            return "figure.stand.dress.line.vertical.figure"
         }
     }
     
-    var genderIconColor: Color {
-        if gender.gender == "Male" {
+    func genderColor(for gender: String) -> Color {
+        if gender == "Male" {
             return .blue
-        } else {
+        } else if gender == "Female" {
             return .pink
+        } else {
+            return .gray
         }
     }
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(systemName: genderIcon)
-                .font(.system(size: 100))
-                .foregroundStyle(genderIconColor)
+            Image(systemName: genderIconName)
+                .font(.system(size: gender.name == "" ? 80 : 90))
+                .frame(width: 150, height: 120)
+                .foregroundStyle(genderColor(for: gender.name))
                 .contentTransition(.symbolEffect(.replace))
-                .padding(.top)
+                .padding()
             
             Rectangle()
                 .fill(.secondary)
-                .frame(width: 175, height: 0.5)
-
+                .frame(width: 180, height: 0.5)
+            
             HStack {
-                makeButton(for: "Male", ofColor: .blue)
-                makeButton(for: "Female", ofColor: .pink)
+                ForEach(["Male", "Female"], id: \.self) { genderName in
+                    Button {
+                        withAnimation {
+                            gender.name = genderName
+                        }
+                    } label: {
+                        Text(gender.name == genderName ? genderName : String(genderName.first!))
+                            .frame(width: gender.name == genderName ? 80 : 12)
+                            .contentTransition(.numericText())
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(genderColor(for: genderName))
+                }
             }
             .padding()
         }
@@ -69,17 +81,6 @@ struct GenderSelectView: View {
             RoundedRectangle(cornerRadius: 30)
                 .stroke(.secondary, lineWidth: 0.5)
         }
-    }
-    
-    func makeButton(for genderName: String, ofColor color: Color) -> some View {
-        Button {
-            gender.gender = genderName
-        } label: {
-            Text(genderName)
-                .frame(width: 60)
-        }
-        .buttonStyle(.bordered)
-        .tint(color)
     }
 }
 
