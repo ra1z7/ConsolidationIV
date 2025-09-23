@@ -20,12 +20,16 @@ struct ContentView: View {
 }
 
 // Why @State works with structs
-struct Gender {
+//struct Gender {
+@Observable
+class Gender {
+// How to use @Observable to store data in classes.
     var name = ""
 }
 
 struct GenderSelectView: View {
     @State private var gender = Gender()
+    @State private var showingGenderDetail = false
     
     var genderIconName: String {
         if gender.name == "Male" {
@@ -91,6 +95,14 @@ struct GenderSelectView: View {
             }
             .buttonStyle(.bordered)
             .tint(.gray)
+            
+            Button("Show Detail") {
+                showingGenderDetail = true
+            }
+        }
+        // Presenting and dismissing views using the sheet() modifier and the dismiss environment key.
+        .sheet(isPresented: $showingGenderDetail) {
+            GenderDetailView(gender: gender)
         }
     }
 }
