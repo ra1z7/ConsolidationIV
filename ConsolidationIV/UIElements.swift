@@ -41,19 +41,37 @@ struct Schedule: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Schedule")
+                .fontWeight(.bold)
+                .foregroundStyle(.black)
+                .padding(.vertical, 12)
             
             HStack {
                 ForEach(0..<7) { index in
-                    VStack {
+                    VStack(spacing: 10) {
                         Text("\(daysOfMonth[index])")
+                            .fontWeight(.semibold)
+                            .foregroundStyle((daysOfWeek[index] == "Thu" && daysOfMonth[index] == 9) ? .black : .white)
                         Text(daysOfWeek[index])
+                            .font(.caption)
+                            .foregroundStyle((daysOfWeek[index] == "Thu" && daysOfMonth[index] == 9) ? .black.opacity(0.5) : .white.opacity(0.5))
                     }
+                    .frame(width: 40, height: 64)
+                    .background((daysOfWeek[index] == "Thu" && daysOfMonth[index] == 9) ? .white : .orange)
+                    .clipShape(.rect(cornerRadius: 14))
                 }
             }
+            .padding(8)
+            .background(.orange)
+            .foregroundStyle(.white)
+            .clipShape(.rect(cornerRadius: 13))
         }
+        .padding()
+        .background(.white)
+        .clipShape(.rect(cornerRadius: 24))
     }
 }
 
 #Preview {
     Schedule()
+        .preferredColorScheme(.dark)
 }
